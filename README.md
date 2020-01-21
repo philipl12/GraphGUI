@@ -1,2 +1,2 @@
 # GraphGUI
-Project that allows me to draw a graph in a GUI
+Allows a user to create an undirected graph. Once created, user should be able to find the single source shortest path between vertices.
