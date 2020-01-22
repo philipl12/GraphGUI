@@ -38,7 +38,7 @@ public class GG3759 extends JFrame {
         super("Graph GUI");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1000, 575);
-        setLayout(new GridLayout(0, 2));//try out gridBagLayout
+        setLayout(new GridLayout(0, 2));
         buttonListener = new AddButtonListener(this);
         regularListener = new AddRegularListener(this);
         picture = new GraphPicturePanel(this);
@@ -63,7 +63,7 @@ public class GG3759 extends JFrame {
         radioButtons.add(changeWeight.genericRB);
 
 
-        //add JButton
+        //add JButton and assign action listener
         addAllEdges = new JButton("Add All Edges");
         addAllEdges.addActionListener(regularListener);
         randomWeight = new JButton("Random Weights");
@@ -73,6 +73,7 @@ public class GG3759 extends JFrame {
         helpText = new JButton("Help");
         helpText.addActionListener(regularListener);
 
+        //group all buttons together into container
         ButtonGroup justButtons = new ButtonGroup();
         justButtons.add(addAllEdges);
         justButtons.add(randomWeight);
@@ -90,7 +91,7 @@ public class GG3759 extends JFrame {
         buttonContainer.add(spanTree);
         buttonContainer.add(helpText);
 
-
+        //add to frame
         add(buttonContainer);
         add(picture);
 

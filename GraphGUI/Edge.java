@@ -15,6 +15,13 @@ public class Edge {
         edgeColor = Color.BLUE;
         isComplete = true;
     }
+    
+    public void changeLocation(Vertex start, Vertex end) {
+    	this.start = start;
+        this.end = end;
+        edge = new Line2D.Double(start.getX() + 6, start.getY() + 6, end.getX() + 6, end.getY() + 6);
+        edgeColor = Color.BLUE;
+    }
 
     public Shape getStartShape() {
         return start.getShape();

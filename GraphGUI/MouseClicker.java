@@ -63,6 +63,7 @@ public class MouseClicker extends MouseAdapter {
 
         }
         if (buttonNum == 3) {
+        	// check if you really need both start and end point since we only move one vertex
             if (startPoint == null) {
                 startPoint = new Vertex(e.getX(), e.getY());
                 try {
@@ -83,10 +84,14 @@ public class MouseClicker extends MouseAdapter {
                 startPoint.changeLocation(endPoint.getX(), endPoint.getY());
                 //startPoint.setVertexColor(Color.RED);
                 try {
+                	// logic needed to move edge
                     for (Edge edges : edgeLocation) {
+                    	// edge start stays the same, need only end point
+                    	// create method with one parameter and distinguish which end is which
                         if (edges.getStartShape().contains(startPoint.getX(), startPoint.getY())) {
-
+                        	edges.changeLocation(startPoint, endPoint);
                         }
+                        
                     }
 
                 }

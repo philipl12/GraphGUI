@@ -23,8 +23,7 @@ public class AddRegularListener implements ActionListener {
         } else if (clickedButton.equals("Help")) {
             JOptionPane.showMessageDialog(helpMessage, "Begin by adding vertexes. Add edges wherever you'd " +
                                           "like.\nThere is an option to move any vertex, so long as you select it. " +
-                                          "You can add weights to any selected edges.\nCurrently cannot add " +
-                                          "all edges, assign random weight, or create a minimal spanning tree.");
+                                          "You can add weights to any selected edges.");
         }
     }
 }
