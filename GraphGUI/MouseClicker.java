@@ -26,34 +26,29 @@ public class MouseClicker extends MouseAdapter {
         if (buttonNum == 2) {
             if (startPoint == null) {
                 startPoint = new Vertex(e.getX(), e.getY());
-                try {
-                    for (Vertex v : vertexLocation) {
-                        if (v.getShape().contains(startPoint.getX(), startPoint.getY())) {
-                            startPoint = v;
-                            startPoint.setVertexColor(Color.GREEN);
-                        }
-                    }
-                } catch (NullPointerException example) {
-                    System.out.println("No start vertex was clicked");
-                    return;
-                }
+
+	            for (Vertex v : vertexLocation) {
+	                if (v.getShape().contains(startPoint.getX(), startPoint.getY())) {
+	                    startPoint = v;
+	                    startPoint.setVertexColor(Color.GREEN);
+	                }
+	            }
             }
             else if(endPoint == null) {
                 endPoint = new Vertex(e.getX(), e.getY());
-                try {
-                    for (Vertex v : vertexLocation) {
-                        if (v.getShape().contains(endPoint.getX(), endPoint.getY())) {
-                            endPoint = v;
-                            newEdge = new Edge(startPoint, endPoint);
-                            edgeLocation.add(newEdge);
-                        }
-
+                
+                for (Vertex v : vertexLocation) {
+                	if (startPoint == endPoint) break;
+                	
+                    if (v.getShape().contains(endPoint.getX(), endPoint.getY())) {
+                        endPoint = v;
+                        newEdge = new Edge(startPoint, endPoint);
+                        edgeLocation.add(newEdge);
+                        break;
                     }
+
                 }
-                catch (NullPointerException example) {
-                    System.out.println("No end vertex was clicked");
-                    return;
-                }
+
                 startPoint.setVertexColor(Color.RED);
                 endPoint.setVertexColor(Color.RED);
                 startPoint = null;
@@ -63,14 +58,17 @@ public class MouseClicker extends MouseAdapter {
 
         }
         if (buttonNum == 3) {
-        	// check if you really need both start and end point since we only move one vertex
+        	// startPoint refers to the vertex you choose to move
             if (startPoint == null) {
                 startPoint = new Vertex(e.getX(), e.getY());
                 try {
                     for (Vertex v : vertexLocation) {
+                    	// cycle through and see if a vertex does exist
+                    	// if it does exist, assign startPoint to v and then set color
                         if (v.getShape().contains(startPoint.getX(), startPoint.getY())) {
                             startPoint = v;
-                            v.setVertexColor(Color.GREEN);
+                            startPoint.setVertexColor(Color.GREEN);
+                            break;
                         }
                     }
                 }
@@ -80,27 +78,31 @@ public class MouseClicker extends MouseAdapter {
                 }
             }
             else if(endPoint == null) {
+            	// sets location of moved vertex by using endPoints X/Y
                 endPoint = new Vertex(e.getX(), e.getY());
+                boolean check = false;
+                // used for loop to figure out if an edge is connected to
+                // the original start point from above
+                
+                for (Edge edges : edgeLocation) {
+                	if (edges.getStartVertex() == startPoint) {
+                		newEdge = edges;
+                		check = true;
+                		break;
+                	}
+                	else if (edges.getEndVertex() == startPoint) {
+                		newEdge = edges;
+                		break;
+                	}
+                }
                 startPoint.changeLocation(endPoint.getX(), endPoint.getY());
-                //startPoint.setVertexColor(Color.RED);
-                try {
-                	// logic needed to move edge
-                    for (Edge edges : edgeLocation) {
-                    	// edge start stays the same, need only end point
-                    	// create method with one parameter and distinguish which end is which
-                        if (edges.getStartShape().contains(startPoint.getX(), startPoint.getY())) {
-                        	edges.changeLocation(startPoint, endPoint);
-                        }
-                        
-                    }
-
-                }
-                catch (Exception example) {
-                    System.out.println("No edges attached");
-                    return;
-                }
+                // Used to only change either start or edge
+                if (check) newEdge.changeStartLocation(startPoint);
+                else newEdge.changeEndLocation(startPoint);
+                
                 startPoint = null;
                 endPoint = null;
+                newEdge = null;
             }
 
             picture.repaint();

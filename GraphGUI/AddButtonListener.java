@@ -20,7 +20,6 @@ public class AddButtonListener implements ActionListener {
         } else if (mainFrame.addEdge.isSelected()) {
             buttonNum = 2;
         } else if (mainFrame.moveVertex.isSelected()) {
-            System.out.println("No move vertex");
             buttonNum = 3;
         } else if (mainFrame.shortestPath.isSelected()) {
             System.out.println("No path");

@@ -16,20 +16,25 @@ public class Edge {
         isComplete = true;
     }
     
-    public void changeLocation(Vertex start, Vertex end) {
-    	this.start = start;
-        this.end = end;
+    public void changeStartLocation(Vertex newStart) {
+    	this.start = newStart;
+        edge = new Line2D.Double(start.getX() + 6, start.getY() + 6, end.getX() + 6, end.getY() + 6);
+        edgeColor = Color.BLUE;
+    }
+    public void changeEndLocation(Vertex newEnd) {
+    	this.end = newEnd;
         edge = new Line2D.Double(start.getX() + 6, start.getY() + 6, end.getX() + 6, end.getY() + 6);
         edgeColor = Color.BLUE;
     }
 
-    public Shape getStartShape() {
-        return start.getShape();
+    public Vertex getStartVertex() {
+        return start;
     }
 
-    public Shape getEndShape() {
-        return end.getShape();
+    public Vertex getEndVertex() {
+        return end;
     }
+    
     public Shape getLine() {
         return edge;
     }
