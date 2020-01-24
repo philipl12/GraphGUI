@@ -1,9 +1,12 @@
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 public class AddRegularListener implements ActionListener {
-    private GG3759 mainFrame;
+    @SuppressWarnings("unused")
+	private GG3759 mainFrame;
     private final JFrame helpMessage = new JFrame();
 
     public AddRegularListener (GG3759 mainFrame){

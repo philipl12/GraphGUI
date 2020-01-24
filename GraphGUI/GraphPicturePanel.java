@@ -31,6 +31,10 @@ public class GraphPicturePanel extends JPanel {
                 g2d.setColor(allEdges.getEdgeColor());
                 Shape line = allEdges.getLine();
                 g2d.draw(line);
+                int weight = allEdges.getWeight();
+                String temp = Double.toString(weight);
+                //g2d.drawString(temp, allEdges.getX(), allEdges.getY());
+                // causes a null pointer exception in MouseClicker line 101
             }
         }
 

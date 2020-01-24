@@ -1,4 +1,6 @@
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Point;
+import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
 
 public class Vertex {
@@ -14,9 +16,7 @@ public class Vertex {
     }
 
 
-    public int getX() {
-        return (int)p.getX();
-    }
+    public int getX() { return (int)p.getX(); }
 
     public int getY() { return (int)p.getY(); }
 
