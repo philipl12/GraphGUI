@@ -34,12 +34,12 @@ public class MouseClicker extends MouseAdapter {
 	                }
 	            }
             }
-            else if(endPoint == null) {
+            // used only if the start and end aren't the same selected vertices
+            else if(endPoint == null &&
+            		!startPoint.getShape().contains(e.getX(), e.getY())) {
                 endPoint = new Vertex(e.getX(), e.getY());
                 
-                for (Vertex v : vertexLocation) {
-                	if (startPoint == endPoint) break;
-                	
+                for (Vertex v : vertexLocation) {                	
                     if (v.getShape().contains(endPoint.getX(), endPoint.getY())) {
                         endPoint = v;
                         newEdge = new Edge(startPoint, endPoint);
@@ -53,6 +53,12 @@ public class MouseClicker extends MouseAdapter {
                 endPoint.setVertexColor(Color.RED);
                 startPoint = null;
                 endPoint = null;
+            }
+            // changes vertex back to red if same vertex is selected
+            else if (endPoint == null &&
+            		startPoint.getShape().contains(e.getX(), e.getY())) {
+            	startPoint.setVertexColor(Color.RED);
+            	startPoint = null;
             }
             picture.repaint();
 
@@ -78,27 +84,34 @@ public class MouseClicker extends MouseAdapter {
                 }
             }
             else if(endPoint == null) {
+            	ArrayList<Edge> edgeContainer = new ArrayList<>();
+            	ArrayList<Boolean> whichPoint = new ArrayList<>();
+            	boolean check = false;
             	// sets location of moved vertex by using endPoints X/Y
                 endPoint = new Vertex(e.getX(), e.getY());
-                boolean check = false;
-                // used for loop to figure out if an edge is connected to
-                // the original start point from above
                 
+                // checks for vertices with multiple edges
                 for (Edge edges : edgeLocation) {
                 	if (edges.getStartVertex() == startPoint) {
                 		newEdge = edges;
                 		check = true;
-                		break;
+                		edgeContainer.add(newEdge);
+                		whichPoint.add(check);
                 	}
                 	else if (edges.getEndVertex() == startPoint) {
                 		newEdge = edges;
-                		break;
+                		check = false;
+                		edgeContainer.add(newEdge);
+                		whichPoint.add(check);
                 	}
                 }
                 startPoint.changeLocation(endPoint.getX(), endPoint.getY());
                 // Used to only change either start or edge
-                if (check) newEdge.changeStartLocation(startPoint);
-                else newEdge.changeEndLocation(startPoint);
+                for (int i = 0; i < whichPoint.size(); i++) {
+                	if (whichPoint.get(i)) edgeContainer.get(i).changeStartLocation(startPoint);
+                    else edgeContainer.get(i).changeEndLocation(startPoint);
+                }
+                
                 
                 startPoint = null;
                 endPoint = null;
