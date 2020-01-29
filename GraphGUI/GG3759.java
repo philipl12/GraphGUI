@@ -7,7 +7,7 @@ import java.awt.event.*;
  */
 
 public class GG3759 extends JFrame {
-    private GraphPicturePanel picture;
+    protected GraphPicturePanel picture;
     protected AddButtonListener buttonListener;
     protected AddRegularListener regularListener;
 
@@ -123,7 +123,9 @@ public class GG3759 extends JFrame {
         }
 
         public void actionPerformed(ActionEvent clicked) {
-            System.out.println("You have a text field to read.");
+        	buttonListener.buttonNum = 5;
+        	genericText.setText(" ");
+            //int newWeight = Integer.parseInt(genericText.getText());
         }
 
     }

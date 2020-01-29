@@ -3,7 +3,7 @@ import java.awt.event.ActionListener;
 
 public class AddButtonListener implements ActionListener {
     private GG3759 mainFrame;
-    private static int buttonNum = -1;
+    protected static int buttonNum = -1;
 
     public AddButtonListener(GG3759 mainFrame) {
         this.mainFrame = mainFrame;
@@ -22,7 +22,6 @@ public class AddButtonListener implements ActionListener {
         } else if (mainFrame.moveVertex.isSelected()) {
             buttonNum = 3;
         } else if (mainFrame.shortestPath.isSelected()) {
-            System.out.println("No path");
             buttonNum = 4;
         }
     }

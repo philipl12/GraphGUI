@@ -17,8 +17,8 @@ public class Edge {
         edge = new Line2D.Double(start.getX() + 6, start.getY() + 6, end.getX() + 6, end.getY() + 6);
         weight = (int) Math.sqrt((end.getY() - start.getY()) * (end.getY() - start.getY()) + 
         		           (end.getX() - start.getX()) * (end.getX() - start.getX()));
-        x = start.getX() + 30;
-        y = start.getY() + 30;
+        x = (start.getX() + end.getX()) / 2  + 20;
+        y = (start.getY() + end.getY()) / 2 + 20;
         edgeColor = Color.BLUE;
         isComplete = true;
     }
@@ -28,8 +28,8 @@ public class Edge {
         edge = new Line2D.Double(start.getX() + 6, start.getY() + 6, end.getX() + 6, end.getY() + 6);
         weight = (int) Math.sqrt((end.getY() - start.getY()) * (end.getY() - start.getY()) + 
 		           (end.getX() - start.getX()) * (end.getX() - start.getX()));
-        x = start.getX() + 30;
-        y = start.getY() + 30;
+        x = (start.getX() + end.getX()) / 2  + 20;
+        y = (start.getY() + end.getY()) / 2 + 20;
         edgeColor = Color.BLUE;
     }
     public void changeEndLocation(Vertex newEnd) {
@@ -37,8 +37,8 @@ public class Edge {
         edge = new Line2D.Double(start.getX() + 6, start.getY() + 6, end.getX() + 6, end.getY() + 6);
         weight = (int) Math.sqrt((end.getY() - start.getY()) * (end.getY() - start.getY()) + 
 		           (end.getX() - start.getX()) * (end.getX() - start.getX()));
-        x = start.getX() + 30;
-        y = start.getY() + 30;
+        x = (start.getX() + end.getX()) / 2  + 20;
+        y = (start.getY() + end.getY()) / 2 + 20;
         edgeColor = Color.BLUE;
     }
 
@@ -47,6 +47,8 @@ public class Edge {
     public Vertex getEndVertex() { return end; }
     
     public int getWeight() { return weight; }
+    
+    public void setWeight(int weight) { this.weight = weight; }
     
     public int getX() { return x; }
     

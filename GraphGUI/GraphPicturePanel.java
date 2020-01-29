@@ -6,7 +6,7 @@ import javax.swing.JPanel;
 
 public class GraphPicturePanel extends JPanel {
     protected GG3759 mainFrame;
-    private MouseClicker clicker;
+    protected MouseClicker clicker;
 
 
     public GraphPicturePanel(GG3759 mainFrame) {

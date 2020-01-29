@@ -23,7 +23,7 @@ public class MouseClicker extends MouseAdapter {
             vertexLocation.add(newVertex);
             newVertex = null;
         }
-        if (buttonNum == 2) {
+        else if (buttonNum == 2) {
             if (startPoint == null) {
                 startPoint = new Vertex(e.getX(), e.getY());
 
@@ -63,7 +63,7 @@ public class MouseClicker extends MouseAdapter {
             picture.repaint();
 
         }
-        if (buttonNum == 3) {
+        else if (buttonNum == 3) {
         	// startPoint refers to the vertex you choose to move
             if (startPoint == null) {
                 startPoint = new Vertex(e.getX(), e.getY());
@@ -112,17 +112,18 @@ public class MouseClicker extends MouseAdapter {
                     else edgeContainer.get(i).changeEndLocation(startPoint);
                 }
                 
-                
                 startPoint = null;
                 endPoint = null;
                 newEdge = null;
             }
-
             picture.repaint();
 
         }
-        if (buttonNum == 4) {
+        else if (buttonNum == 4) {
             System.out.println("Shortest path pressed");
+        }
+        else if (buttonNum == 5){
+        	System.out.println("Change weight pressed");
         }
     }
 
