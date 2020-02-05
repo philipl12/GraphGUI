@@ -23,6 +23,8 @@ public class GraphPicturePanel extends JPanel {
             g2d.setColor(vertices.getVertexColor());
             Shape s = vertices.getShape();
             g2d.fill(s);
+            String temp = Integer.toString(vertices.getVertexNumber());
+            g2d.drawString(temp, vertices.getX(), vertices.getY());
         }
 
         for (Edge allEdges : clicker.edgeLocation) {
@@ -31,8 +33,7 @@ public class GraphPicturePanel extends JPanel {
                 g2d.setColor(allEdges.getEdgeColor());
                 Shape line = allEdges.getLine();
                 g2d.draw(line);
-                int weight = allEdges.getWeight();
-                String temp = Double.toString(weight);
+                String temp = Integer.toString(allEdges.getWeight());
                 g2d.drawString(temp, allEdges.getX(), allEdges.getY());
             }
         }

@@ -17,8 +17,8 @@ public class Edge {
         edge = new Line2D.Double(start.getX() + 6, start.getY() + 6, end.getX() + 6, end.getY() + 6);
         weight = (int) Math.sqrt((end.getY() - start.getY()) * (end.getY() - start.getY()) + 
         		           (end.getX() - start.getX()) * (end.getX() - start.getX()));
-        x = (start.getX() + end.getX()) / 2  + 20;
-        y = (start.getY() + end.getY()) / 2 + 20;
+        x = (start.getX() + end.getX()) / 2  + 20; // Causes weight to be displayed 
+        y = (start.getY() + end.getY()) / 2 + 20; // close to midpoint
         edgeColor = Color.BLUE;
         isComplete = true;
     }

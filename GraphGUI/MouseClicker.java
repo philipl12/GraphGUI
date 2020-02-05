@@ -7,6 +7,7 @@ public class MouseClicker extends MouseAdapter {
     private GraphPicturePanel picture;
     private Vertex newVertex, startPoint, endPoint;
     private Edge newEdge;
+    private static int vertexCount = 0;
     protected ArrayList<Vertex> vertexLocation = new ArrayList<>();
     protected ArrayList<Edge> edgeLocation = new ArrayList<>();
 
@@ -15,17 +16,51 @@ public class MouseClicker extends MouseAdapter {
         picture.addMouseListener(this);
     }
 
+    public int minDistance(int numVertices, int distance[], Boolean shortPath[]) {
+    	int min = Integer.MAX_VALUE, minIndex = -1;
+    	
+    	for (int i = 0; i < numVertices; i++) {
+    		if (!shortPath[i] && distance[i] <= min) {
+    			min = distance[i];
+    			minIndex = i;
+    		}
+    	}
+    	
+    	return minIndex;
+    }
+    
+    public void dijkstra(int source) {
+    	int numVertices = vertexLocation.size();
+    	int distance[] = new int[numVertices];
+    	Boolean shortPath[] = new Boolean[numVertices];
+    	
+    	for (int i = 0; i < numVertices - 1; i++) {
+    		distance[i] = Integer.MAX_VALUE;
+    		shortPath[i] = false;
+    	}    	
+    	distance[source] = 0;
+    	
+    	for (int i = 0; i < numVertices; i++) {
+    		int u = minDistance(numVertices, distance, shortPath);
+    		shortPath[u] = true;
+    		
+    		for (int j = 0; j < numVertices; j++) {
+    			
+    		}
+    	}
+    }
+    
     public void mousePressed(MouseEvent e) {
         int buttonNum = picture.mainFrame.buttonListener.getNum();
 
         if (buttonNum == 1) {
-            newVertex = new Vertex(e.getX(), e.getY());
+            newVertex = new Vertex(e.getX(), e.getY(), ++vertexCount);
             vertexLocation.add(newVertex);
             newVertex = null;
         }
         else if (buttonNum == 2) {
             if (startPoint == null) {
-                startPoint = new Vertex(e.getX(), e.getY());
+                startPoint = new Vertex(e.getX(), e.getY(), -1);
 
 	            for (Vertex v : vertexLocation) {
 	                if (v.getShape().contains(startPoint.getX(), startPoint.getY())) {
@@ -37,7 +72,7 @@ public class MouseClicker extends MouseAdapter {
             // used only if the start and end aren't the same selected vertices
             else if(endPoint == null &&
             		!startPoint.getShape().contains(e.getX(), e.getY())) {
-                endPoint = new Vertex(e.getX(), e.getY());
+                endPoint = new Vertex(e.getX(), e.getY(), -1);
                 
                 for (Vertex v : vertexLocation) {                	
                     if (v.getShape().contains(endPoint.getX(), endPoint.getY())) {
@@ -66,7 +101,7 @@ public class MouseClicker extends MouseAdapter {
         else if (buttonNum == 3) {
         	// startPoint refers to the vertex you choose to move
             if (startPoint == null) {
-                startPoint = new Vertex(e.getX(), e.getY());
+                startPoint = new Vertex(e.getX(), e.getY(), -1);
                 try {
                     for (Vertex v : vertexLocation) {
                     	// cycle through and see if a vertex does exist
@@ -88,7 +123,7 @@ public class MouseClicker extends MouseAdapter {
             	ArrayList<Boolean> whichPoint = new ArrayList<>();
             	boolean check = false;
             	// sets location of moved vertex by using endPoints X/Y
-                endPoint = new Vertex(e.getX(), e.getY());
+                endPoint = new Vertex(e.getX(), e.getY(), startPoint.getVertexNumber());
                 
                 // checks for vertices with multiple edges
                 for (Edge edges : edgeLocation) {
@@ -120,7 +155,22 @@ public class MouseClicker extends MouseAdapter {
 
         }
         else if (buttonNum == 4) {
-            System.out.println("Shortest path pressed");
+        	if (edgeLocation.size() > 0) {
+        		
+        	}
+        	else if (startPoint == null) {
+                startPoint = new Vertex(e.getX(), e.getY(), -1);
+
+	            for (Vertex v : vertexLocation) {
+	                if (v.getShape().contains(startPoint.getX(), startPoint.getY())) {
+	                    startPoint = v;
+	                    startPoint.setVertexColor(Color.GREEN);
+	                }
+	            }
+	            
+            }
+        	
+        	startPoint = null;
         }
         else if (buttonNum == 5){
         	System.out.println("Change weight pressed");
