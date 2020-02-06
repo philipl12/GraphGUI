@@ -2,12 +2,14 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
+import java.util.HashMap;
 
 public class Vertex {
     private Point p;
     private Color vertexColor;
     private Shape vertex;
     private final int vertexNumber;
+    protected HashMap<Integer, Integer> edgeValues = new HashMap<Integer, Integer>();
 
 
     public Vertex(int x, int y, int vertexNumber) {

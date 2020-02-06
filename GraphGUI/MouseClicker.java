@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class MouseClicker extends MouseAdapter {
     private GraphPicturePanel picture;
-    private Vertex newVertex, startPoint, endPoint;
+    private Vertex startPoint, endPoint;
     private Edge newEdge;
     private static int vertexCount = 0;
     protected ArrayList<Vertex> vertexLocation = new ArrayList<>();
@@ -53,17 +53,37 @@ public class MouseClicker extends MouseAdapter {
     public void mousePressed(MouseEvent e) {
         int buttonNum = picture.mainFrame.buttonListener.getNum();
 
+        // change code to not allow for vertices to touch
         if (buttonNum == 1) {
-            newVertex = new Vertex(e.getX(), e.getY(), ++vertexCount);
-            vertexLocation.add(newVertex);
-            newVertex = null;
+        	boolean insideVertex = false;
+            
+            
+            for (Vertex v : vertexLocation) {
+                if (v.getShape().contains(e.getX(), e.getY())) {
+                	insideVertex = true;
+                    break;
+                }
+            }
+            
+            if (!insideVertex) {
+            	startPoint = new Vertex(e.getX(), e.getY(), ++vertexCount);
+            	vertexLocation.add(startPoint);
+                startPoint = null;
+            }
+            else {
+            	startPoint = null;
+            	System.out.println("Can't create vertex with start "
+            			           + "point inside another vertex");
+            }
+                        
         }
+        
+        // need to catch a null pointer exception
         else if (buttonNum == 2) {
             if (startPoint == null) {
-                startPoint = new Vertex(e.getX(), e.getY(), -1);
 
 	            for (Vertex v : vertexLocation) {
-	                if (v.getShape().contains(startPoint.getX(), startPoint.getY())) {
+	                if (v.getShape().contains(e.getX(), e.getY())) {
 	                    startPoint = v;
 	                    startPoint.setVertexColor(Color.GREEN);
 	                }
@@ -72,10 +92,9 @@ public class MouseClicker extends MouseAdapter {
             // used only if the start and end aren't the same selected vertices
             else if(endPoint == null &&
             		!startPoint.getShape().contains(e.getX(), e.getY())) {
-                endPoint = new Vertex(e.getX(), e.getY(), -1);
                 
                 for (Vertex v : vertexLocation) {                	
-                    if (v.getShape().contains(endPoint.getX(), endPoint.getY())) {
+                	if (v.getShape().contains(e.getX(), e.getY())) {
                         endPoint = v;
                         newEdge = new Edge(startPoint, endPoint);
                         edgeLocation.add(newEdge);
@@ -83,73 +102,102 @@ public class MouseClicker extends MouseAdapter {
                     }
 
                 }
-
-                startPoint.setVertexColor(Color.RED);
-                endPoint.setVertexColor(Color.RED);
-                startPoint = null;
-                endPoint = null;
+                
+                // condition needed for when user didn't select a vertex
+                // prevents a null pointer exception
+                if (endPoint != null) {
+                	// add to hash map the values for vertex number and weight
+                    startPoint.edgeValues.put(endPoint.getVertexNumber(), newEdge.getWeight());
+                    
+                    startPoint.setVertexColor(Color.RED);
+                    endPoint.setVertexColor(Color.RED);
+                    startPoint = null;
+                    endPoint = null;
+                    newEdge = null;
+                }
+                else {
+                	startPoint.setVertexColor(Color.RED);
+                	startPoint = null;
+                    endPoint = null;
+                    newEdge = null;
+                }
+                
             }
             // changes vertex back to red if same vertex is selected
             else if (endPoint == null &&
-            		startPoint.getShape().contains(e.getX(), e.getY())) {
+            		 startPoint.getShape().contains(e.getX(), e.getY())) {
             	startPoint.setVertexColor(Color.RED);
             	startPoint = null;
             }
+
             picture.repaint();
 
         }
         else if (buttonNum == 3) {
         	// startPoint refers to the vertex you choose to move
+        	// issue with a vertex being moved too close to another
             if (startPoint == null) {
-                startPoint = new Vertex(e.getX(), e.getY(), -1);
-                try {
-                    for (Vertex v : vertexLocation) {
-                    	// cycle through and see if a vertex does exist
-                    	// if it does exist, assign startPoint to v and then set color
-                        if (v.getShape().contains(startPoint.getX(), startPoint.getY())) {
-                            startPoint = v;
-                            startPoint.setVertexColor(Color.GREEN);
-                            break;
-                        }
+
+                for (Vertex v : vertexLocation) {
+                	// cycle through and see if a vertex does exist
+                	// if it does exist, assign startPoint to v and then set color
+                    if (v.getShape().contains(e.getX(), e.getY())) {	
+                        startPoint = v;
+                        startPoint.setVertexColor(Color.GREEN);
+                        break;
                     }
                 }
-                catch (Exception example) {
-                    System.out.println("No end vertex was clicked");
-                    return;
-                }
             }
+            // sets location of moved vertex by using endPoints X/Y
             else if(endPoint == null) {
-            	ArrayList<Edge> edgeContainer = new ArrayList<>();
-            	ArrayList<Boolean> whichPoint = new ArrayList<>();
-            	boolean check = false;
-            	// sets location of moved vertex by using endPoints X/Y
-                endPoint = new Vertex(e.getX(), e.getY(), startPoint.getVertexNumber());
-                
-                // checks for vertices with multiple edges
-                for (Edge edges : edgeLocation) {
-                	if (edges.getStartVertex() == startPoint) {
-                		newEdge = edges;
-                		check = true;
-                		edgeContainer.add(newEdge);
-                		whichPoint.add(check);
-                	}
-                	else if (edges.getEndVertex() == startPoint) {
-                		newEdge = edges;
-                		check = false;
-                		edgeContainer.add(newEdge);
-                		whichPoint.add(check);
-                	}
+            	boolean insideVertex = false;
+            	
+            	for (Vertex v : vertexLocation) {
+                    if (v.getShape().contains(e.getX(), e.getY())) {	
+                        insideVertex = true;
+                        break;
+                    }
                 }
-                startPoint.changeLocation(endPoint.getX(), endPoint.getY());
-                // Used to only change either start or edge
-                for (int i = 0; i < whichPoint.size(); i++) {
-                	if (whichPoint.get(i)) edgeContainer.get(i).changeStartLocation(startPoint);
-                    else edgeContainer.get(i).changeEndLocation(startPoint);
-                }
-                
-                startPoint = null;
-                endPoint = null;
-                newEdge = null;
+            	
+            	if (!insideVertex) {
+            		ArrayList<Edge> edgeContainer = new ArrayList<>();
+                	ArrayList<Boolean> whichPoint = new ArrayList<>();
+                	boolean check = false;
+                	
+                    
+                    // checks for vertices with multiple edges
+                    for (Edge edge : edgeLocation) {
+                    	if (edge.getStartVertex() == startPoint) {
+                    		newEdge = edge;
+                    		check = true;
+                    		edgeContainer.add(newEdge);
+                    		whichPoint.add(check);
+                    	}
+                    	else if (edge.getEndVertex() == startPoint) {
+                    		newEdge = edge;
+                    		check = false;
+                    		edgeContainer.add(newEdge);
+                    		whichPoint.add(check);
+                    	}
+                    }
+                    startPoint.changeLocation(e.getX(), e.getY());
+                    // Used to only change either start or end
+                    for (int i = 0; i < whichPoint.size(); i++) {
+                    	if (whichPoint.get(i)) edgeContainer.get(i).changeStartLocation(startPoint);
+                        else edgeContainer.get(i).changeEndLocation(startPoint);
+                    }
+                    
+                    startPoint = null;
+                    newEdge = null;
+            	}
+            	else {
+            		startPoint.setVertexColor(Color.RED);
+            		startPoint = null;
+            		System.out.println("Can't move vertex with move "
+     			           + "point inside another vertex");
+            	}
+            	
+            	
             }
             picture.repaint();
 
@@ -159,10 +207,9 @@ public class MouseClicker extends MouseAdapter {
         		
         	}
         	else if (startPoint == null) {
-                startPoint = new Vertex(e.getX(), e.getY(), -1);
 
 	            for (Vertex v : vertexLocation) {
-	                if (v.getShape().contains(startPoint.getX(), startPoint.getY())) {
+	            	if (v.getShape().contains(e.getX(), e.getY())) {
 	                    startPoint = v;
 	                    startPoint.setVertexColor(Color.GREEN);
 	                }
