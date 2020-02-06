@@ -183,11 +183,30 @@ public class MouseClicker extends MouseAdapter {
                     startPoint.changeLocation(e.getX(), e.getY());
                     // Used to only change either start or end
                     for (int i = 0; i < whichPoint.size(); i++) {
-                    	if (whichPoint.get(i)) edgeContainer.get(i).changeStartLocation(startPoint);
-                        else edgeContainer.get(i).changeEndLocation(startPoint);
+                    	// let endPoint be a temporary vertex
+                    	// for every single edge in edgeContainer
+                    	if (whichPoint.get(i)) {
+                    		endPoint = edgeContainer.get(i).getEndVertex();
+                    		
+                    		edgeContainer.get(i).changeStartLocation(startPoint);	
+                    		startPoint.edgeValues.replace(endPoint.getVertexNumber(),
+                    				edgeContainer.get(i).getWeight());
+                    		endPoint.edgeValues.replace(startPoint.getVertexNumber(),
+                    				edgeContainer.get(i).getWeight());
+                    	}
+                        else {
+                        	endPoint = edgeContainer.get(i).getStartVertex();
+                        	
+                        	edgeContainer.get(i).changeEndLocation(startPoint);
+                        	startPoint.edgeValues.replace(endPoint.getVertexNumber(),
+                        			edgeContainer.get(i).getWeight());
+                        	endPoint.edgeValues.replace(startPoint.getVertexNumber(),
+                    				edgeContainer.get(i).getWeight());
+                        }                		
                     }
                     
                     startPoint = null;
+                    endPoint = null;
                     newEdge = null;
             	}
             	else {
