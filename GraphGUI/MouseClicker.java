@@ -3,6 +3,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 public class MouseClicker extends MouseAdapter {
     private GraphPicturePanel picture;
     private Vertex startPoint, endPoint;
@@ -10,12 +13,22 @@ public class MouseClicker extends MouseAdapter {
     private static int vertexCount = 0;
     protected ArrayList<Vertex> vertexLocation = new ArrayList<>();
     protected ArrayList<Edge> edgeLocation = new ArrayList<>();
+    private final JFrame myMessage = new JFrame();
 
     public MouseClicker(GraphPicturePanel picture) {
         this.picture = picture;
         picture.addMouseListener(this);
     }
 
+    public void getCorrectVertex(int u) {
+    	for (Vertex v: vertexLocation) {
+    		if (v.getVertexNumber() == u) {
+    			startPoint = v;
+    			break;
+    		}
+    	}
+    }
+    
     public int minDistance(int numVertices, int distance[], Boolean shortPath[]) {
     	int min = Integer.MAX_VALUE, minIndex = -1;
     	
@@ -43,11 +56,18 @@ public class MouseClicker extends MouseAdapter {
     	for (int i = 0; i < numVertices; i++) {
     		int u = minDistance(numVertices, distance, shortPath);
     		shortPath[u] = true;
+    		getCorrectVertex(u);
     		
     		for (int j = 0; j < numVertices; j++) {
-    			
+    			if (!shortPath[j] && startPoint.edgeValues.get(j) != null &&
+    					distance[u] != Integer.MAX_VALUE && distance[u] + 
+    					startPoint.edgeValues.get(j) < distance[j]) {
+    				distance[j] = distance[u] + startPoint.edgeValues.get(j);
+    			}
     		}
     	}
+    	
+    	JOptionPane.showMessageDialog(myMessage, "Finished with dijkstra");
     }
     
     public void mousePressed(MouseEvent e) {
@@ -222,8 +242,8 @@ public class MouseClicker extends MouseAdapter {
 
         }
         else if (buttonNum == 4) {
-        	if (edgeLocation.size() > 0) {
-        		
+        	if (edgeLocation.size() <= 0) {
+        		JOptionPane.showMessageDialog(myMessage, "No edges in graph");
         	}
         	else if (startPoint == null) {
 
@@ -231,9 +251,11 @@ public class MouseClicker extends MouseAdapter {
 	            	if (v.getShape().contains(e.getX(), e.getY())) {
 	                    startPoint = v;
 	                    startPoint.setVertexColor(Color.GREEN);
+	                    break;
 	                }
 	            }
 	            
+	            dijkstra(startPoint.getVertexNumber());
             }
         	
         	startPoint = null;
